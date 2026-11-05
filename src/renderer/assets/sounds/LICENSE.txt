@@ -1,0 +1,7 @@
+Sound files in this folder:
+  move-1.ogg   = impact_wood_light_001.ogg    (every move; three takes)
+  move-2.ogg   = impact_wood_light_003.ogg
+  move-3.ogg   = impact_wood_light_004.ogg
+  back.ogg     = impact_wood_medium_003.ogg   (stepping back to a previous move)
+from "Impact Sounds" by Kenney (www.kenney.nl), licensed CC0 1.0 Universal (public domain).
+https://kenney.nl/assets/impact-sounds  —  https://creativecommons.org/publicdomain/zero/1.0/

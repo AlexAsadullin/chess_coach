@@ -1,0 +1,9 @@
+Piece sets in this folder (taken from lichess.org, https://github.com/lichess-org/lila/tree/master/public/piece):
+
+  neo/       "Kosal" set by Kosal Sen — part of lila, GNU AGPL v3 or later
+  chessnut/  "Chessnut" by Alexis Luengas — Apache License 2.0
+             https://github.com/LexLuengas/chessnut-pieces
+  merida/    "Merida" by Armando Hernandez Marroquin — GNU GPL v2 or later
+
+The default "Classic" set (Cburnett, Wikimedia Commons, CC BY-SA 3.0 / GPLv2+) is
+taken from the cm-chessboard package at install time.

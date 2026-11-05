@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024">
+  <!--
+    Chess Coach app icon.
+    Knight silhouette adapted from Cburnett's chess knight (Wikimedia Commons, CC BY-SA 3.0).
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a6d86a"/>
+      <stop offset=".55" stop-color="#83b84d"/>
+      <stop offset="1" stop-color="#6c9e3c"/>
+    </linearGradient>
+    <linearGradient id="lip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a8a30"/>
+      <stop offset="1" stop-color="#3f6a1f"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".38"/>
+      <stop offset=".72" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="piece" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset=".6" stop-color="#f6f8f1"/>
+      <stop offset="1" stop-color="#dfe8d2"/>
+    </linearGradient>
+    <linearGradient id="base" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#dfe7d4"/>
+    </linearGradient>
+    <clipPath id="tile"><rect x="96" y="92" width="832" height="808" rx="188"/></clipPath>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="14" flood-color="#2f5214" flood-opacity=".45"/>
+    </filter>
+  </defs>
+
+  <!-- tile with chess.com-style 3D bottom edge -->
+  <rect x="96" y="124" width="832" height="808" rx="188" fill="url(#lip)"/>
+  <rect x="96" y="92" width="832" height="808" rx="188" fill="url(#bg)"/>
+
+  <!-- faint board pattern in the lower part of the tile -->
+  <g clip-path="url(#tile)" opacity=".10" fill="#1f3b0c">
+    <g transform="translate(512 900) scale(1 .42) rotate(45)">
+      <rect x="-300" y="-300" width="150" height="150"/><rect x="0" y="-300" width="150" height="150"/>
+      <rect x="-150" y="-150" width="150" height="150"/><rect x="150" y="-150" width="150" height="150"/>
+      <rect x="-300" y="0" width="150" height="150"/><rect x="0" y="0" width="150" height="150"/>
+      <rect x="-150" y="150" width="150" height="150"/><rect x="150" y="150" width="150" height="150"/>
+    </g>
+  </g>
+
+  <!-- top gloss -->
+  <path clip-path="url(#tile)" d="M96 92h832v300C760 340 600 318 512 318S264 340 96 392z" fill="url(#gloss)"/>
+  <rect x="99" y="95" width="826" height="802" rx="185" fill="none" stroke="#ffffff" stroke-opacity=".22" stroke-width="6"/>
+
+  <!-- knight -->
+  <g filter="url(#shadow)">
+    <!-- pedestal -->
+    <path d="M318 742c0-34 22-56 58-60h272c36 4 58 26 58 60v26c0 14-10 24-24 24H342c-14 0-24-10-24-24z" fill="url(#base)"/>
+    <rect x="350" y="652" width="324" height="44" rx="22" fill="url(#base)"/>
+    <!-- body (Cburnett knight, scaled) -->
+    <g transform="translate(205 128) scale(13.2)">
+      <path d="M22 10c10.5 1 16.5 8 16 29H15c0-9 10-6.5 8-21" fill="url(#piece)"/>
+      <path d="M24 18c.38 2.91-5.55 7.37-8 9-3 2-2.82 4.34-5 4-1.04-.94 1.41-3.04 0-3-1 0 .19 1.23-1 2-1 0-4 1-4-4 0-2 6-12 6-12s1.89-1.9 2-3.5c-.73-.99-.5-2-.5-3 1-1 3 2.5 3 2.5h2s.78-1.99 2.5-3c1 0 1 3 1 3" fill="url(#piece)"/>
+      <!-- mane -->
+      <g fill="none" stroke="#9fbd7c" stroke-width=".9" stroke-linecap="round" opacity=".9">
+        <path d="M27.2 12.2c3.2 2.2 5.4 5.6 6.3 10"/>
+        <path d="M29.6 11.6c3.6 2.6 5.9 6.4 6.6 11.4"/>
+        <path d="M25 13.4c2.6 1.8 4.4 4.6 5.2 8"/>
+      </g>
+      <!-- jaw / cheek line -->
+      <path d="M24 18c-.9 2.6-3.6 5-6.2 6.6" fill="none" stroke="#b5cc98" stroke-width=".8" stroke-linecap="round"/>
+      <!-- eye and nostril -->
+      <ellipse cx="14.5" cy="15.5" rx=".75" ry="1.6" transform="rotate(30 14.5 15.5)" fill="#3e6a1f"/>
+      <circle cx="9" cy="25.5" r=".7" fill="#3e6a1f"/>
+    </g>
+  </g>
+</svg>

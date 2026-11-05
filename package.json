@@ -1,0 +1,115 @@
+{
+  "name": "chess-coach",
+  "productName": "Chess Coach",
+  "version": "1.0.0",
+  "description": "Chess Coach \u2014 free desktop game review for macOS, Windows and Linux: Stockfish 19 analysis, chess.com-style move classification, best-move lines.",
+  "main": "src/main/main.js",
+  "allowScripts": {
+    "electron@38.8.6": true
+  },
+  "scripts": {
+    "postinstall": "node scripts/ensure-electron.js && node scripts/prepare-assets.js && node scripts/fetch-stockfish.js && node scripts/brand-dev-electron.js",
+    "prestart": "node scripts/prepare-assets.js",
+    "start": "electron .",
+    "test": "node --test test/*.test.js",
+    "dist": "npm run dist:mac",
+    "dist:mac": "node scripts/prepare-assets.js && node scripts/fetch-stockfish.js --os mac --arch arm64 --strict && node scripts/fetch-stockfish.js --os mac --arch x64 --strict && electron-builder --mac --universal",
+    "dist:win": "node scripts/prepare-assets.js && node scripts/fetch-stockfish.js --os win --arch x64 --strict && electron-builder --win --x64",
+    "dist:linux": "node scripts/prepare-assets.js && node scripts/fetch-stockfish.js --os linux --arch x64 --strict && electron-builder --linux --x64",
+    "fetch-engine": "node scripts/fetch-stockfish.js",
+    "build-openings": "node scripts/build-openings.js",
+    "build-icon": "electron scripts/build-icon.js"
+  },
+  "keywords": [
+    "chess",
+    "pgn",
+    "analysis",
+    "electron"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "chess.js": "^1.4.0"
+  },
+  "devDependencies": {
+    "cm-chessboard": "^8.15.4",
+    "electron": "^38.8.6",
+    "electron-builder": "^26.18.0",
+    "lucide-static": "^1.68.0"
+  },
+  "build": {
+    "appId": "com.alexasad.chesscoach",
+    "productName": "Chess Coach",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.board-games",
+      "identity": "-",
+      "hardenedRuntime": false,
+      "minimumSystemVersion": "11.0",
+      "extendInfo": {
+        "NSHumanReadableCopyright": "Chess Coach. Analysis by Stockfish (GPL-3.0)."
+      }
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Game"
+    },
+    "fileAssociations": [
+      {
+        "ext": "pgn",
+        "name": "PGN chess game",
+        "role": "Viewer"
+      }
+    ],
+    "extraResources": [
+      {
+        "from": "engine/${os}-${arch}",
+        "to": "engine",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ],
+    "icon": "build/icon.png",
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "artifactName": "Chess-Coach-${version}-${arch}.${ext}",
+    "dmg": {
+      "title": "Chess Coach",
+      "contents": [
+        {
+          "x": 150,
+          "y": 190
+        },
+        {
+          "x": 410,
+          "y": 190,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 560,
+        "height": 380
+      },
+      "artifactName": "Chess-Coach-macOS.dmg"
+    }
+  },
+  "author": "AlexAsad"
+}
