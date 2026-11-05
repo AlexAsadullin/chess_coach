@@ -8,6 +8,8 @@ engine/
 src/renderer/vendor/
 
 # ---- build output (electron-builder) ----
+# Installers are NOT committed (the .dmg is ~285 MB, over GitHub's 100 MB file
+# limit). Publish them as GitHub Release assets instead; see README "Build from source".
 dist/
 out/
 *.dmg

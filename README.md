@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <a href="../../releases/latest/download/Chess-Coach-macOS.dmg"><b>⬇ Download for macOS (.dmg)</b></a>
+  <a href="https://github.com/AlexAsadullin/chess_coach/releases/latest/download/Chess-Coach-macOS.dmg"><b>⬇ Download for macOS (.dmg)</b></a>
   &nbsp;·&nbsp; Intel &amp; Apple Silicon, macOS 11+
-  &nbsp;·&nbsp; <a href="../../releases/latest">All releases</a>
+  &nbsp;·&nbsp; <a href="https://github.com/AlexAsadullin/chess_coach/releases/latest">All releases</a>
 </p>
 
 <p align="center">
@@ -21,7 +21,7 @@
 
 ## Install (macOS)
 
-1. Download **[Chess-Coach-macOS.dmg](../../releases/latest/download/Chess-Coach-macOS.dmg)**.
+1. Download **[Chess-Coach-macOS.dmg](https://github.com/AlexAsadullin/chess_coach/releases/latest/download/Chess-Coach-macOS.dmg)**.
 2. Open it and drag **Chess Coach** into **Applications**.
 3. Start it. The first time, macOS will ask you to confirm (see below).
 
