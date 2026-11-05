@@ -1,0 +1,45 @@
+# ---- dependencies (restored by `npm install`) ----
+node_modules/
+
+# ---- downloaded / generated during `npm install` ----
+# Stockfish binaries (scripts/fetch-stockfish.js, ~105 MB per platform)
+engine/
+# chess.js + piece sprites copied for the renderer (scripts/prepare-assets.js)
+src/renderer/vendor/
+
+# ---- build output (electron-builder) ----
+dist/
+out/
+*.dmg
+*.blockmap
+*.app/
+*.exe
+*.AppImage
+*.deb
+*.snap
+
+# ---- logs, caches, temp files ----
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+*.tmp
+.cache/
+coverage/
+
+# ---- OS / editor junk ----
+.DS_Store
+._*
+Thumbs.db
+Desktop.ini
+.idea/
+.vscode/
+*.swp
+*~
+
+# ---- local secrets (code signing / notarization) ----
+.env
+.env.*
+*.p12
+*.cer
+*.provisionprofile
