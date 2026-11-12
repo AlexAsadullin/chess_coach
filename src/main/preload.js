@@ -4,6 +4,8 @@ contextBridge.exposeInMainWorld('chessApi', {
   listGames: () => ipcRenderer.invoke('games:list'),
   getGame: (id) => ipcRenderer.invoke('games:get', id),
   touchGame: (id) => ipcRenderer.invoke('games:touch', id),
+  setPinned: (id, pinned) => ipcRenderer.invoke('games:setPinned', id, pinned),
+  saveBotDraft: (id, pgn, elo, humanColor, moveTypes) => ipcRenderer.invoke('games:saveBotDraft', id, pgn, elo, humanColor, moveTypes),
   setAnalysisSummary: (id, summary) => ipcRenderer.invoke('games:setAnalysisSummary', id, summary),
   renameGame: (id, name) => ipcRenderer.invoke('games:rename', id, name),
   removeGame: (id) => ipcRenderer.invoke('games:remove', id),

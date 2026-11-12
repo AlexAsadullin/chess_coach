@@ -4,11 +4,21 @@ import { ReviewView } from './review.js';
 import { toast } from './util.js';
 import { loadSettings } from './settings.js';
 import { sounds } from './sounds.js';
+import { PlayBotView } from './play-bot.js';
 
 const root = document.getElementById('app');
 let review = null;
+let playBot = null;
 
-const library = new LibraryView(root, { onOpen: openGame });
+const library = new LibraryView(root, { onOpen: openGame, onPlayBot: startBot, onResumeBot: (game) => startBot(game) });
+
+function startBot(game = null) {
+  review?.close(); review = null;
+  playBot = new PlayBotView(root, { onBack: showLibrary, onAnalyze: async (_pgn, id) => {
+    if (id) openGame(id);
+  }});
+  if (game) playBot.resume(game); else playBot.show();
+}
 
 async function openGame(id) {
   try {

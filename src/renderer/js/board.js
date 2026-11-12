@@ -35,12 +35,14 @@ export class Board {
     root.innerHTML = `
       <div class="board-squares"></div>
       <div class="board-highlights"></div>
+      <div class="board-markers"></div>
       <div class="board-flash"></div>
       <div class="board-pieces"></div>
       <svg class="board-arrows" viewBox="0 0 800 800"></svg>
       <div class="board-badges"></div>`;
     this.squaresEl = root.querySelector('.board-squares');
     this.hlEl = root.querySelector('.board-highlights');
+    this.markersEl = root.querySelector('.board-markers');
     this.flashEl = root.querySelector('.board-flash');
     this.piecesEl = root.querySelector('.board-pieces');
     this.arrowsEl = root.querySelector('.board-arrows');
@@ -75,7 +77,8 @@ export class Board {
         let coords = '';
         if (x === 0) coords += `<span class="coord rank">${r}</span>`;
         if (y === 7) coords += `<span class="coord file">${FILES[f]}</span>`;
-        html += `<div class="sq ${light ? 'light' : 'dark'}">${coords}</div>`;
+        const square = `${FILES[f]}${r}`;
+        html += `<div class="sq ${light ? 'light' : 'dark'}" data-square="${square}">${coords}</div>`;
       }
     }
     this.squaresEl.innerHTML = html;
@@ -100,6 +103,7 @@ export class Board {
         this.hlEl.appendChild(this.#cell('hl', sq));
       }
     }
+    this.markersEl.innerHTML = (state.markers || []).map((sq) => this.#cell('legal-marker', sq)).map((el) => { el.style.pointerEvents = 'none'; return el.outerHTML; }).join('');
     // pieces
     const seen = new Set();
     for (const p of state.pieces) {

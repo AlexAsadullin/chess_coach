@@ -241,7 +241,7 @@ class AnalysisService {
    * @returns {Promise<{moves: Array<{move, san, scoreBefore}>, finalScore}>}
    *   scoreBefore is the engine score (side to move) of the position before that move.
    */
-  async bestLine(fen, { firstMove, gameId, plies } = {}, onStep) {
+  async bestLine(fen, { firstMove, gameId, plies, elo } = {}, onStep) {
     const cache = this.#lineCache(gameId);
     const n = this.#plies(plies);
     const key = lineKey(fen, firstMove, n);
@@ -250,7 +250,7 @@ class AnalysisService {
       return cache.bestLines[key];
     }
     let job = this.lines.get(key);
-    if (!job) job = this.#startLine(key, fen, firstMove, gameId, true, n);
+    if (!job) job = this.#startLine(key, fen, firstMove, gameId, true, n, Number.isFinite(elo) ? Math.round((elo - 400) / 105) : null);
     else if (!job.foreground) this.#promote(job);
     if (onStep) {
       job.listeners.add(onStep);
@@ -321,8 +321,8 @@ class AnalysisService {
     }
   }
 
-  #startLine(key, fen, firstMove, gameId, foreground, plies) {
-    const job = { key, plies, moves: [], listeners: new Set(), foreground: false };
+  #startLine(key, fen, firstMove, gameId, foreground, plies, skillLevel = null) {
+    const job = { key, plies, skillLevel, moves: [], listeners: new Set(), foreground: false };
     if (foreground) this.#promote(job);
     this.lines.set(key, job);
     job.promise = (async () => {
@@ -353,7 +353,7 @@ class AnalysisService {
     const analyse = async () => {
       await this.#idle(job);
       const depth = job.moves.length < 6 ? SETTINGS.lineDepth : SETTINGS.lineTailDepth;
-      return this.interactive.analyse(chess.fen(), { depth, multipv: 1 });
+      return this.interactive.analyse(chess.fen(), { depth, multipv: 1, skillLevel: job.skillLevel });
     };
     while (job.moves.length < limit && !chess.isGameOver()) {
       const r = await analyse();

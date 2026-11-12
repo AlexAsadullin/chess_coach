@@ -19,7 +19,21 @@ process.stdin.on('data', (d) => {
     else if (line === 'isready') process.stdout.write('readyok\n');
     else if (line.startsWith('go')) {
       const depth = Number((/depth (\d+)/.exec(line) || [])[1] || 1);
-      const moves = new Chess(fen).moves({ verbose: true }).map((m) => m.from + m.to + (m.promotion || ''));
+      // Only the first two moves are emitted. Generating SAN for every legal
+      // move makes this fake engine's timing depend heavily on CPU load.
+      const chess = new Chess(fen);
+      const moves = [];
+      for (const row of chess.board()) {
+        for (const piece of row) {
+          if (!piece || piece.color !== chess.turn()) continue;
+          for (const move of chess.moves({ square: piece.square, verbose: true })) {
+            moves.push(move.from + move.to + (move.promotion || ''));
+            if (moves.length === 2) break;
+          }
+          if (moves.length === 2) break;
+        }
+        if (moves.length === 2) break;
+      }
       const out = moves.length
         ? `info depth ${depth} multipv 1 score cp 25 pv ${moves[0]}\n` +
           (moves[1] ? `info depth ${depth} multipv 2 score cp 10 pv ${moves[1]}\n` : '') +

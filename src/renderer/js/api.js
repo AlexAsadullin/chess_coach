@@ -55,6 +55,8 @@ function browserFallback() {
     listGames: async () => [...games.values()],
     getGame: async (id) => games.get(id),
     touchGame: async (id) => { const g = games.get(id); if (g) g.lastOpenedAt = new Date().toISOString(); },
+    setPinned: async (id, pinned) => { const g=games.get(id); if(g)g.pinned=Boolean(pinned); return Boolean(g?.pinned); },
+    saveBotDraft: async (id, pgn, botElo, humanColor, liveMoveTypes=[]) => { const res=await importText(pgn); const g=res.games?.[0]; if(!g)return null; Object.assign(g,{id,source:'play-bot',inProgress:g.result==='*',botElo,humanColor,liveMoveTypes});games.set(id,g);return g; },
     renameGame: async () => {},
     removeGame: async (id) => { games.delete(id); },
     importDialog: async () => {

@@ -11,7 +11,7 @@ const path = require('path');
 const META_FIELDS = [
   'id', 'name', 'white', 'black', 'whiteElo', 'blackElo', 'result', 'event',
   'site', 'termination', 'date', 'time', 'plies', 'movesCount', 'source',
-  'importedAt', 'lastOpenedAt', 'analysis',
+  'importedAt', 'lastOpenedAt', 'analysis', 'inProgress', 'botElo', 'humanColor', 'pinned', 'liveMoveTypes',
 ];
 
 function pick(obj, keys) {
@@ -75,6 +75,7 @@ class GameStore {
       const stamp = new Date(base + i).toISOString();
       const record = {
         ...g,
+        pinned: existing?.pinned || false,
         analysis: existing?.analysis || null,
         importedAt: existing?.importedAt || stamp,
         lastOpenedAt: single ? stamp : existing?.lastOpenedAt || null,
@@ -87,6 +88,30 @@ class GameStore {
     }
     this.#saveIndex();
     return added;
+  }
+
+  saveBotDraft(id, game) {
+    if (!/^[a-f0-9]{16}$/.test(id)) throw new Error('bad game id');
+    const existing = this.index.find((g) => g.id === id);
+    const stamp = new Date().toISOString();
+    const record = { ...game, id, source: 'play-bot', inProgress: game.result === '*', pinned: existing?.pinned || false,
+      importedAt: existing?.importedAt || stamp, lastOpenedAt: stamp, analysis: existing?.analysis || null };
+    this.#writeAtomic(this.#gamePath(id), record);
+    const meta = pick(record, META_FIELDS);
+    if (existing) Object.assign(existing, meta); else this.index.push(meta);
+    this.#saveIndex();
+    return { ...meta };
+  }
+
+  setPinned(id, pinned) {
+    const meta = this.index.find((g) => g.id === id);
+    if (!meta) return false;
+    meta.pinned = Boolean(pinned);
+    const rec = this.get(id);
+    rec.pinned = meta.pinned;
+    this.#writeAtomic(this.#gamePath(id), rec);
+    this.#saveIndex();
+    return meta.pinned;
   }
 
   /** Remember the result of a finished analysis (shown in the library). */

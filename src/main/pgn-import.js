@@ -144,7 +144,7 @@ function parseGame(chunk, sourceName) {
       sans = movesFromLooseText(movetext, startFen);
     }
   }
-  if (!sans.length) throw new Error('No legal chess moves found');
+  if (!sans.length && !startFen) throw new Error('No legal chess moves found');
 
   const white = headers.White && headers.White !== '?' ? headers.White : 'White';
   const black = headers.Black && headers.Black !== '?' ? headers.Black : 'Black';

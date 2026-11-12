@@ -18,6 +18,12 @@ function registerIpc(store, analysis, settings) {
   ipcMain.handle('games:list', () => store.list());
   ipcMain.handle('games:get', (_e, id) => store.get(id));
   ipcMain.handle('games:touch', (_e, id) => store.touch(id));
+  ipcMain.handle('games:setPinned', (_e, id, pinned) => store.setPinned(id, pinned));
+  ipcMain.handle('games:saveBotDraft', (_e, id, pgn, botElo, humanColor, liveMoveTypes) => {
+    const { games } = parseText(String(pgn), null);
+    if (!games.length) throw new Error('Could not save the bot game');
+    return store.saveBotDraft(String(id), { ...games[0], botElo: Number(botElo), humanColor, liveMoveTypes: Array.isArray(liveMoveTypes) ? liveMoveTypes.slice(0, 600) : [] });
+  });
   ipcMain.handle('games:setAnalysisSummary', (_e, id, summary) => store.setAnalysisSummary(id, summary));
   ipcMain.handle('games:rename', (_e, id, name) => store.rename(id, name));
   ipcMain.handle('games:remove', (_e, id) => {

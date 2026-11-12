@@ -113,11 +113,12 @@ class UciEngine {
    *   score is from the side to move's point of view; lines = [] when the
    *   game is over in that position.
    */
-  analyse(fen, { depth = 20, multipv = 1, movetime } = {}) {
+  analyse(fen, { depth = 20, multipv = 1, movetime, skillLevel } = {}) {
     const job = async () => {
       await this.start();
       const best = new Map();
       this.#send(`setoption name MultiPV value ${multipv}`);
+      if (Number.isFinite(skillLevel)) this.#send(`setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skillLevel)))}`);
       this.#send(`position fen ${fen}`);
       this.#send(movetime ? `go movetime ${movetime}` : `go depth ${depth}`);
       let reached = 0;

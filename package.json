@@ -111,5 +111,8 @@
       "artifactName": "Chess-Coach-macOS.dmg"
     }
   },
-  "author": "AlexAsad"
+  "author": {
+    "name": "AlexAsad",
+    "email": "asadulinsd@gmail.com"
+  }
 }

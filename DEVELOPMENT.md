@@ -33,6 +33,8 @@ These are **not** in the source and are created by the steps below:
 - An **internet connection** for the first install. It downloads Electron (~100 MB) and Stockfish 19 (~80 MB) from their official GitHub releases.
 - **macOS builds** need macOS with the Xcode Command Line Tools (`xcode-select --install`). They provide `codesign`, `iconutil`, `sips` and `plutil`.
 - **Windows and Linux builds** are best made on Windows or Linux respectively (see section 6).
+- **Linux `.deb` builds** require a maintainer email in the root `package.json` author field. Before building, set it to an address you control, for example: `"author": { "name": "Your Name", "email": "you@example.com" }`. electron-builder uses this metadata for the Debian package; without it, the AppImage may build but the overall command exits with an error while creating the `.deb`.
+- **Linux AppImage runtime:** Ubuntu users may need FUSE 2 to launch an AppImage. On current Ubuntu releases install `libfuse2` or `libfuse2t64` (`sudo apt install libfuse2t64` on releases that provide that package).
 
 ## 3. First-time setup
 
@@ -120,6 +122,8 @@ electron-builder bundles the app, Electron and the Stockfish binary (via `extraR
 | `npm run dist:linux` | `Chess-Coach-<version>-x86_64.AppImage`, `.deb` | Linux |
 
 Each `dist:*` script first fetches the matching Stockfish build (`--strict`, so a failed download stops the build), then runs electron-builder.
+
+For Linux, complete the author email prerequisite above before running `npm run dist:linux`. The command downloads the AppImage tooling on its first run, so make sure the build machine can reach GitHub. A successful build creates both the `.AppImage` and `.deb` in `dist/`. To run the AppImage, make it executable if needed (`chmod +x dist/Chess-Coach-<version>-x86_64.AppImage`) and launch it from a terminal or file manager. On Ubuntu, install the FUSE 2 compatibility package first if it reports `libfuse.so.2` missing.
 
 If the macOS build stops with `ENOTEMPTY ... mac-universal-x64-temp`, Finder created a `.DS_Store` inside `dist/` while it was building. Delete `dist/` and run the command again.
 

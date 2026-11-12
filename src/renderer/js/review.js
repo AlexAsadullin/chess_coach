@@ -22,6 +22,7 @@ export class ReviewView {
   constructor(root, { onBack }) {
     this.root = root;
     this.onBack = onBack;
+    this.showMoveTypes = localStorage.getItem('review.showMoveTypes') !== 'false';
     this.onKey = this.onKey.bind(this);
   }
 
@@ -348,6 +349,7 @@ export class ReviewView {
             <span class="title-sub">${escapeHtml([g.event, g.date, g.result].filter(Boolean).join(' · '))}</span>
           </div>
           <div class="engine-status" id="engineStatus"></div>
+          <label class="move-type-toggle"><input id="showMoveTypes" type="checkbox" ${this.showMoveTypes ? 'checked' : ''}><span>Show move types</span></label>
           <button class="icon-btn sound-btn" id="soundBtn"></button>
           <button class="icon-btn sound-btn" id="reviewSettingsBtn" title="Settings">${UI_ICONS.settings}</button>
         </header>
@@ -436,6 +438,7 @@ export class ReviewView {
       sounds.play('move');
     };
     $('#reviewSettingsBtn').onclick = () => openSettings();
+    $('#showMoveTypes').onchange = (e) => { this.showMoveTypes = e.target.checked; localStorage.setItem('review.showMoveTypes', String(this.showMoveTypes)); this.root.querySelector('.summary').innerHTML = this.#summaryHtml(); this.root.querySelector('#moveList').innerHTML = this.#moveListHtml(); this.update(); };
     this.offSettings = onSettings(() => {
       paintSound();
       this.update();
@@ -545,7 +548,7 @@ export class ReviewView {
     const { ply, n, timeline } = this;
     const moves = this.#moves;
     const info = ply > 0 ? moves[ply - 1] : null;
-    const kind = info?.classification || null;
+    const kind = this.showMoveTypes ? info?.classification || null : null;
     const bestAvailable = Boolean(info?.bestMove) && kind && !PLAYED_IS_BEST.has(kind);
     const lastMove = ply > 0 ? timeline.moves[ply - 1] : null;
 
@@ -573,8 +576,10 @@ export class ReviewView {
     this.root.querySelector('.coach-line').hidden = true;
     if (ply === 0) {
       head.innerHTML = `<span class="coach-title">Starting position</span><span class="coach-hint">Use → or the arrows below to step through the game.</span>`;
-    } else if (!kind) {
+    } else if (!info?.classification) {
       head.innerHTML = `<span class="spinner"></span><span class="coach-title">${escapeHtml(lastMove.san)}</span><span class="coach-hint">Analyzing…</span>`;
+    } else if (!this.showMoveTypes) {
+      head.innerHTML = `<span class="coach-title">${escapeHtml(lastMove.san)}</span>${evalNow ? `<span class="coach-eval">${formatEval(evalNow)}</span>` : ''}`;
     } else {
       const c = CLASSIFICATIONS[kind];
       const extra = kind === 'book' && info.opening
@@ -740,7 +745,7 @@ export class ReviewView {
     const fmt = (a) => (a == null || !done ? '—' : a.toFixed(1));
     const rows = CLASSIFICATION_ORDER.map((k) => {
       const c = CLASSIFICATIONS[k];
-      return `<div class="sum-row"><span class="sum-n">${counts.w[k] || 0}</span><span class="sum-label" style="color:${c.color}">${classificationIcon(k, 20)}${c.label}</span><span class="sum-n">${counts.b[k] || 0}</span></div>`;
+      return this.showMoveTypes ? `<div class="sum-row"><span class="sum-n">${counts.w[k] || 0}</span><span class="sum-label" style="color:${c.color}">${classificationIcon(k, 20)}${c.label}</span><span class="sum-n">${counts.b[k] || 0}</span></div>` : '';
     }).join('');
     return `<div class="sum-players"><span>${escapeHtml(this.game.white)}</span><span>${escapeHtml(this.game.black)}</span></div>
       <div class="sum-acc"><span class="acc acc-w">${fmt(acc.w)}</span><span class="acc-label">Accuracy</span><span class="acc acc-b">${fmt(acc.b)}</span></div>
@@ -761,7 +766,7 @@ export class ReviewView {
         open = true;
       }
       const k = info[i]?.classification;
-      const icon = k ? classificationIcon(k, 16) : '<span class="pending-dot"></span>';
+      const icon = this.showMoveTypes ? (k ? classificationIcon(k, 16) : '<span class="pending-dot"></span>') : '';
       const active = !this.branch && ply === this.ply ? ' active' : '';
       cells.push(`<button class="ml-move${active}" data-ply="${ply}" title="${k ? CLASSIFICATIONS[k].label : 'Analyzing…'}">${icon}<span>${escapeHtml(mv.san)}</span></button>`);
     });
